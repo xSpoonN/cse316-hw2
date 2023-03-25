@@ -5,7 +5,7 @@ import { modle/* , showPage */ } from '../App.js'
 /* import { addTagLink } from './alltags.js' */
 
 export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans }) {
-  if (unans && answers === 0) return null
+  if (unans && answers !== 0) return undefined
   return (
     <tr>
       <td className="qTD">
@@ -43,15 +43,22 @@ Question.propTypes = {
 export default function Questions () {
   const [sortOrder, setSortOrder] = useState('Newest')
   const [questionList, setQuestionList] = useState([])
+  const [qCount, setQCount] = useState(0)
 
   useEffect(() => {
     function fetchQuestions (qList = modle.getAllQstns()) {
       /* Sort Options */
-      if (sortOrder === 'Newest' || sortOrder === 'Unanswered') qList.sort((a, b) => b.askDate - a.askDate)
-      if (sortOrder === 'Active') qList.sort(compareActive)
+      if (sortOrder === 'Newest' || sortOrder === 'Unanswered') {
+        /* console.log('Sorting by Newest') */ qList = qList.sort((a, b) => (b.askDate > a.askDate) ? -1 : 1)
+        qList.reverse()
+      }
+      if (sortOrder === 'Active') {
+        /* console.log('Sorting by Active') */ qList.sort(compareActive)
+      }
 
       /* This line is needed to have a dotted line on top */
       const qL = qList.map((question) => {
+        if (sortOrder === 'Unanswered' && question.ansIds.length !== 0) return undefined
         return (
           <Question
             qid={question.qid}
@@ -67,6 +74,7 @@ export default function Questions () {
         )
       })
       setQuestionList(qL)
+      setQCount(qL.filter(q => q).length)
       return qL
     }
     fetchQuestions()
@@ -128,15 +136,22 @@ export default function Questions () {
 
   return (
     <div>
-      <p id="questioncount">{`${questionList.length === 1 ? questionList.length + ' question' : questionList.length + ' questions'}`}</p>
+      <p id="questioncount">
+        {`${qCount === 1
+          ? qCount + ' question'
+          : qCount === 0 ? 'No Questions Found.' : qCount + ' questions'
+          }`}
+      </p>
       <button id="newbutt" className="questionsort" onClick={setNewest}>Newest</button>
       <button id="activebutt" className="questionsort" onClick={setActive}>Active</button>
       <button id="unbutt" className="questionsort" onClick={setUnanswered}>Unanswered</button>
       <br id="liststart"/>
       <table className="questions">
-        {questionList}
+        <tbody>
+          {questionList}
+        </tbody>
       </table>
-      <p id="nosearchresults"/*  style="display:none;font-weight:bold" */>No Questions Found.</p>
+      {/* <p id="nosearchresults">No Questions Found.</p> */}
     </div>
   )
 }
