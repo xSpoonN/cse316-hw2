@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { modle/* , showPage */ } from './index.js'
-import { showAnswers } from './answers.js'
+import { modle/* , showPage */ } from '../App.js'
+/* import { showAnswers } from './answers.js' */
 /* import { addTagLink } from './alltags.js' */
 
-export function Question ({ qid, answers, views, title, tagList, askedBy, date }) {
+export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans }) {
+  if (unans && answers === 0) return null
   return (
     <tr>
       <td className="qTD">
@@ -13,7 +14,7 @@ export function Question ({ qid, answers, views, title, tagList, askedBy, date }
       </td>
 
       <td className="qTD">
-        <a className="qlink" onClick={showAnswers(qid, true)}>
+        <a className="qlink" /* onClick={showAnswers(qid, true)} */>
           {title}
         </a>
         <br/>
@@ -24,20 +25,19 @@ export function Question ({ qid, answers, views, title, tagList, askedBy, date }
         ))}
       </td>
 
-      <td className="qTD">{`<b>${askedBy}</b> asked ${modle.formatDate(
-        date
-      )}`}</td>
+      <td className="qTD"><b>{askedBy}</b> {`asked ${modle.formatDate(date)}`}</td>
     </tr>
   )
 }
 Question.propTypes = {
-  qid: PropTypes.number.isRequired,
+  qid: PropTypes.string.isRequired,
   answers: PropTypes.number.isRequired,
   views: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   tagList: PropTypes.array.isRequired,
   askedBy: PropTypes.string.isRequired,
-  date: PropTypes.instanceOf(Date).isRequired
+  date: PropTypes.instanceOf(Date).isRequired,
+  unans: PropTypes.bool.isRequired
 }
 
 export default function Questions () {
@@ -45,6 +45,30 @@ export default function Questions () {
   const [questionList, setQuestionList] = useState([])
 
   useEffect(() => {
+    function fetchQuestions (qList = modle.getAllQstns()) {
+      /* Sort Options */
+      if (sortOrder === 'Newest' || sortOrder === 'Unanswered') qList.sort((a, b) => b.askDate - a.askDate)
+      if (sortOrder === 'Active') qList.sort(compareActive)
+
+      /* This line is needed to have a dotted line on top */
+      const qL = qList.map((question) => {
+        return (
+          <Question
+            qid={question.qid}
+            answers={question.ansIds.length}
+            views={question.views}
+            title={question.title}
+            tagList={question.tagIds}
+            askedBy={question.askedBy}
+            date={question.askDate}
+            key={question.qid}
+            unans={sortOrder === 'Unanswered'}
+          />
+        )
+      })
+      setQuestionList(qL)
+      return qL
+    }
     fetchQuestions()
   }, [sortOrder])
 
@@ -83,30 +107,6 @@ export default function Questions () {
     setSortOrder('Unanswered')
   }
 
-  function fetchQuestions (qList = modle.getAllQstns()) {
-    /* Sort Options */
-    if (sortOrder === 'Newest' || sortOrder === 'Unanswered') qList.sort((a, b) => b.askDate - a.askDate)
-    if (sortOrder === 'Active') qList.sort(compareActive)
-
-    /* This line is needed to have a dotted line on top */
-    const qL = qList.map((question) => {
-      return (
-        <Question
-          qid={question.qid}
-          answers={question.ansIds.length}
-          views={question.views}
-          title={question.title}
-          tagList={question.tagIds}
-          askedBy={question.askedBy}
-          date={question.askDate}
-          key={question.qid}
-        />
-      )
-    })
-    setQuestionList(qL)
-    return qL
-  }
-
   function compareActive (a, b) {
     let aLatest = 0
     let bLatest = 0
@@ -134,9 +134,9 @@ export default function Questions () {
       <button id="unbutt" className="questionsort" onClick={setUnanswered}>Unanswered</button>
       <br id="liststart"/>
       <table className="questions">
-        {fetchQuestions()}
+        {questionList}
       </table>
-      <p id="nosearchresults" style="display:none;font-weight:bold">No Questions Found.</p>
+      <p id="nosearchresults"/*  style="display:none;font-weight:bold" */>No Questions Found.</p>
     </div>
   )
 }

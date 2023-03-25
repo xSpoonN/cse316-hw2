@@ -1,8 +1,12 @@
 /* import Model from '../models/model.js' */
 import React from 'react'
+import Questions from './questions.js'
 
 export default function fakeStackOverflow () {
   return (
-    <h1> Replace with relevant content </h1>
+    <div>
+      <h1> Replace with relevant content </h1>
+      <Questions />
+    </div>
   )
 }
