@@ -50,7 +50,7 @@ export default class Model {
           text: 'hey vsauce, michael here',
           tagIds: ['t8'],
           askedBy: 'awawawawawa',
-          askDate: new Date('December, 2023 19:53:19'),
+          askDate: new Date('December 12, 2022 19:53:19'),
           ansIds: [],
           views: 23623
         },
