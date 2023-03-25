@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { modle/* , showPage */ } from '../App.js'
+import '../stylesheets/questions.css'
 /* import { showAnswers } from './answers.js' */
 /* import { addTagLink } from './alltags.js' */
 
@@ -135,7 +136,7 @@ export default function Questions () {
   }
 
   return (
-    <div>
+    <div className="content">
       <p id="questioncount">
         {`${qCount === 1
           ? qCount + ' question'
