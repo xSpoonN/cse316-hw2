@@ -3,8 +3,14 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Questions from './questions.js'
 import PostQuestion from './questionform.js'
+import Answers from './answers.js'
+import AllTags from './alltags.js'
+import AnswerForm from './answerform.js'
 import '../stylesheets/fakeStackOverflow.css'
 import '../stylesheets/questions.css'
+import '../stylesheets/answerform.css'
+import '../stylesheets/answers.css'
+import '../stylesheets/alltags.css'
 
 export function Header ({ searchQueryChange }) {
   const [searchQuery, setSearchQuery] = useState('')
@@ -13,7 +19,7 @@ export function Header ({ searchQueryChange }) {
   }
   return (
     <div className="header" id="header">
-      {/* <img src="QueueUnderflow.png" alt="logo" style={{ height: '8%', width: 'auto', position: 'fixed', left: '10px' }}/> */}
+      {/* <img src="../../QueueUnderflow.png" alt="logo" style={{ height: '8%', width: 'auto', position: 'fixed', left: '10px' }}/> */}
       <h1 id="title">Queue Underflow</h1>
       <input type="text"
       id="search"
@@ -62,13 +68,19 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
       )
     case 'Answers':
       console.log('Switching to Answers')
-      break
+      return (
+        <Answers />
+      )
     case 'PostAnswer':
       console.log('Switching to PostAnswer')
-      break
+      return (
+        <AnswerForm setActivePage={setActivePage}/>
+      )
     case 'AllTags':
       console.log('Switching to AllTags')
-      break
+      return (
+        <AllTags />
+      )
   }
 }
 Page.propTypes = {
