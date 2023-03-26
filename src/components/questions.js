@@ -41,19 +41,41 @@ Question.propTypes = {
   unans: PropTypes.bool.isRequired
 }
 
-export default function Questions () {
+export default function Questions ({ searchQuery }) {
   const [sortOrder, setSortOrder] = useState('Newest')
   const [questionList, setQuestionList] = useState([])
   const [qCount, setQCount] = useState(0)
 
+  function search (query, q = modle.getAllQstns(), t = modle.getAllTags()) { // Maybe move this to another file.
+    const searchTerms = query.toLowerCase().split(' ')
+    const searchWords = searchTerms.filter((word) => !/^\[\S+\]$/.test(word)) /* Words are those that are not surrounded in brackets */
+    const searchTags = searchTerms
+      .filter((word) => /^\[\S+\]$/.test(word)) /* Tests for [x] for tags */
+      .map((tag) => tag.replace(/\[|\]/g, '')) /* Deletes the brackets from each tag */
+    const out = []
+    for (let i = 0; i < q.length; i++) {
+      if (
+        (searchWords.some((term) =>
+          q[i].title.toLowerCase().includes(term) || /* Title includes a search term */
+          q[i].text.toLowerCase().includes(term) /* Description includes the search term */
+        ) || searchWords.length === 0) /* Or there are no search words */ && /* AND */
+        (q[i].tagIds.some((tag) =>
+          searchTags.some((term) => term === t.find((x) => x.tid === tag).name) /* Tag name matches a search tag */
+        ) || searchTags.length === 0) /* Or there are no search tags */
+      ) out.push(q[i])
+    }
+    console.log(`Searched "${query}", words: [ ${searchWords} ], tags: [ ${searchTags} ]`)
+    return out
+  }
+
   useEffect(() => {
     function fetchQuestions (qList = modle.getAllQstns()) {
       /* Sort Options */
+      if (searchQuery) qList = search(searchQuery)
       if (sortOrder === 'Newest' || sortOrder === 'Unanswered') {
         /* console.log('Sorting by Newest') */ qList = qList.sort((a, b) => (b.askDate > a.askDate) ? -1 : 1)
         qList.reverse()
-      }
-      if (sortOrder === 'Active') {
+      } else if (sortOrder === 'Active') {
         /* console.log('Sorting by Active') */ qList.sort(compareActive)
       }
 
@@ -80,29 +102,6 @@ export default function Questions () {
     }
     fetchQuestions()
   }, [sortOrder])
-
-  // function search (query) { // Maybe move this to another file.
-  //   const searchTerms = query.toLowerCase().split(' ')
-  //   const searchWords = searchTerms.filter((word) => !/^\[\S+\]$/.test(word)) /* Words are those that are not surrounded in brackets */
-  //   const searchTags = searchTerms
-  //     .filter((word) => /^\[\S+\]$/.test(word)) /* Tests for [x] for tags */
-  //     .map((tag) => tag.replace(/\[|\]/g, '')) /* Deletes the brackets from each tag */
-  //   const q = modle.getAllQstns()
-  //   const t = modle.getAllTags()
-  //   const out = []
-  //   for (let i = 0; i < q.length; i++) {
-  //     if (
-  //       (searchWords.some((term) =>
-  //         q[i].title.toLowerCase().includes(term) || /* Title includes a search term */
-  //         q[i].text.toLowerCase().includes(term) /* Description includes the search term */
-  //       ) || searchWords.length === 0) /* Or there are no search words */ && /* AND */
-  //       (q[i].tagIds.some((tag) =>
-  //         searchTags.some((term) => term === t.find((x) => x.tid === tag).name) /* Tag name matches a search tag */
-  //       ) || searchTags.length === 0) /* Or there are no search tags */
-  //     ) out.push(q[i])
-  //   }
-  //   return out
-  // }
 
   function setNewest () {
     setSortOrder('Newest')
@@ -155,4 +154,7 @@ export default function Questions () {
       {/* <p id="nosearchresults">No Questions Found.</p> */}
     </div>
   )
+}
+Questions.propTypes = {
+  searchQuery: PropTypes.string
 }
