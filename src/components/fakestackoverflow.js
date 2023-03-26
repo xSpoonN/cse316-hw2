@@ -1,16 +1,29 @@
 /* import Model from '../models/model.js' */
-import React from 'react'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import Questions from './questions.js'
 import '../stylesheets/fakeStackOverflow.css'
 
-export function Header () {
+export function Header ({ searchQueryChange }) {
+  const [searchQuery, setSearchQuery] = useState('')
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) searchQueryChange(searchQuery)
+  }
   return (
     <div className="header">
       {/* <img src="QueueUnderflow.png" alt="logo" style={{ height: '8%', width: 'auto', position: 'fixed', left: '10px' }}/> */}
       <h1 id="title">Queue Underflow</h1>
-      <input type="text" id="search" placeholder="Search ..." /* onKeyDown="checkSearch(event)" *//>
+      <input type="text"
+      id="search"
+      placeholder="Search ..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      onKeyDown={handleKeyDown}/>
     </div>
   )
+}
+Header.propTypes = {
+  searchQueryChange: PropTypes.func.isRequired
 }
 
 export function Sidebar () {
@@ -23,11 +36,13 @@ export function Sidebar () {
 }
 
 export default function fakeStackOverflow () {
+  const [searchQuery, setSearchQuery] = useState('')
+
   return (
     <div>
-      <Header />
+      <Header searchQueryChange={ setSearchQuery }/>
       <Sidebar />
-      <Questions />
+      <Questions key={ searchQuery } searchQuery={ searchQuery }/>
     </div>
   )
 }
