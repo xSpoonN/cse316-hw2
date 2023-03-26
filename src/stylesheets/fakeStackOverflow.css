@@ -9,7 +9,9 @@ body { /* Applies this font globally */
     text-align: center;
     padding: 1px;
     width: 100%;
+    font-size:22px;
     min-width: 400px;
+    vertical-align: middle;
     height: 80px;
     position: fixed;
     z-index: 5;
@@ -67,11 +69,15 @@ body { /* Applies this font globally */
     padding-top: 90px;
     z-index: 1;
 }
+.contentheader {
+    font-size: x-large;
+    font-weight: bold;
+    display: inline-block;
+}
 
 .errormsg {
     color:crimson;
-    font-weight:bold;
-    display:none
+    font-weight:bold
 }
 
 .askqbutt {

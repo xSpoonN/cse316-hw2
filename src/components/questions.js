@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { modle/* , showPage */ } from '../App.js'
+import { modle } from '../App.js'
 import '../stylesheets/questions.css'
+import '../stylesheets/fakeStackOverflow.css'
 /* import { showAnswers } from './answers.js' */
 /* import { addTagLink } from './alltags.js' */
 
 export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans }) {
   if (unans && answers !== 0) return undefined
   return (
-    <tr>
+    <tr className="qRow">
       <td className="qTD">
         {answers} answers <br />
         {views} views
@@ -73,13 +74,11 @@ export default function Questions ({ searchQuery }) {
       /* Sort Options */
       if (searchQuery) qList = search(searchQuery)
       if (sortOrder === 'Newest' || sortOrder === 'Unanswered') {
-        /* console.log('Sorting by Newest') */ qList = qList.sort((a, b) => (b.askDate > a.askDate) ? -1 : 1)
-        qList.reverse()
+        qList = qList.sort((a, b) => (b.askDate > a.askDate) ? -1 : 1); qList.reverse()
       } else if (sortOrder === 'Active') {
-        /* console.log('Sorting by Active') */ qList.sort(compareActive)
+        qList.sort(compareActive)
       }
 
-      /* This line is needed to have a dotted line on top */
       const qL = qList.map((question) => {
         if (sortOrder === 'Unanswered' && question.ansIds.length !== 0) return undefined
         return (
@@ -96,6 +95,7 @@ export default function Questions ({ searchQuery }) {
           />
         )
       })
+      qL.unshift(<tr className="qRow" key="RowFiller"></tr>) /* Adds a blank row at the top to get the top border */
       setQuestionList(qL)
       setQCount(qL.filter(q => q).length)
       return qL
@@ -135,11 +135,11 @@ export default function Questions ({ searchQuery }) {
   }
 
   return (
-    <div className="content">
+    <div>
       <p id="questioncount">
-        {`${qCount === 1
-          ? qCount + ' question'
-          : qCount === 0 ? 'No Questions Found.' : qCount + ' questions'
+        {`${(qCount - 1) === 1
+          ? (qCount - 1) + ' question'
+          : (qCount - 1) === 0 ? 'No Questions Found.' : (qCount - 1) + ' questions'
           }`}
       </p>
       <button id="newbutt" className="questionsort" onClick={setNewest}>Newest</button>
@@ -151,7 +151,6 @@ export default function Questions ({ searchQuery }) {
           {questionList}
         </tbody>
       </table>
-      {/* <p id="nosearchresults">No Questions Found.</p> */}
     </div>
   )
 }
