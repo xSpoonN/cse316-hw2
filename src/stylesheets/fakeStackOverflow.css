@@ -91,3 +91,7 @@ body { /* Applies this font globally */
     float:right;
     top: 15px;
 }
+
+.active {
+    background-color: rgb(189, 189, 189);
+}

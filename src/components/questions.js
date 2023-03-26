@@ -7,7 +7,7 @@ import '../stylesheets/fakeStackOverflow.css'
 /* import { addTagLink } from './alltags.js' */
 
 export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans }) {
-  if (unans && answers !== 0) return undefined
+  if (unans && answers) return undefined
   return (
     <tr className="qRow">
       <td className="qTD">
@@ -59,13 +59,13 @@ export default function Questions ({ searchQuery }) {
         (searchWords.some((term) =>
           q[i].title.toLowerCase().includes(term) || /* Title includes a search term */
           q[i].text.toLowerCase().includes(term) /* Description includes the search term */
-        ) || searchWords.length === 0) /* Or there are no search words */ && /* AND */
+        ) || !searchWords.length) /* Or there are no search words */ && /* AND */
         (q[i].tagIds.some((tag) =>
           searchTags.some((term) => term === t.find((x) => x.tid === tag).name) /* Tag name matches a search tag */
-        ) || searchTags.length === 0) /* Or there are no search tags */
+        ) || !searchTags.length) /* Or there are no search tags */
       ) out.push(q[i])
     }
-    console.log(`Searched "${query}", words: [ ${searchWords} ], tags: [ ${searchTags} ]`)
+    /* console.log(`Searched "${query}", words: [ ${searchWords} ], tags: [ ${searchTags} ]`) */
     return out
   }
 
@@ -79,18 +79,18 @@ export default function Questions ({ searchQuery }) {
         qList.sort(compareActive)
       }
 
-      const qL = qList.map((question) => {
-        if (sortOrder === 'Unanswered' && question.ansIds.length !== 0) return undefined
+      const qL = qList.map(({ qid, ansIds, views, title, tagIds, askedBy, askDate }) => {
+        if (sortOrder === 'Unanswered' && ansIds.length) return undefined
         return (
           <Question
-            qid={question.qid}
-            answers={question.ansIds.length}
-            views={question.views}
-            title={question.title}
-            tagList={question.tagIds}
-            askedBy={question.askedBy}
-            date={question.askDate}
-            key={question.qid}
+            qid={qid}
+            answers={ansIds.length}
+            views={views}
+            title={title}
+            tagList={tagIds}
+            askedBy={askedBy}
+            date={askDate}
+            key={qid}
             unans={sortOrder === 'Unanswered'}
           />
         )
@@ -103,31 +103,19 @@ export default function Questions ({ searchQuery }) {
     fetchQuestions()
   }, [sortOrder])
 
-  function setNewest () {
-    setSortOrder('Newest')
-  }
-
-  function setActive () {
-    setSortOrder('Active')
-  }
-
-  function setUnanswered () {
-    setSortOrder('Unanswered')
-  }
-
   function compareActive (a, b) {
     let aLatest = 0
     let bLatest = 0
     const ans = modle.getAllAnswers()
     for (let i = 0; i < a.ansIds.length; i++) { // Finds the latest answer
       const answe = ans.find((x) => x.aid === a.ansIds[i])
-      if (aLatest === 0 || answe.ansDate > aLatest) {
+      if (!aLatest || answe.ansDate > aLatest) {
         aLatest = answe.ansDate
       }
     }
     for (let i = 0; i < b.ansIds.length; i++) { // Finds the latest answer
       const answe = ans.find((x) => x.aid === b.ansIds[i])
-      if (bLatest === 0 || answe.ansDate > bLatest) {
+      if (!bLatest || answe.ansDate > bLatest) {
         bLatest = answe.ansDate
       }
     }
@@ -139,12 +127,12 @@ export default function Questions ({ searchQuery }) {
       <p id="questioncount">
         {`${(qCount - 1) === 1
           ? (qCount - 1) + ' question'
-          : (qCount - 1) === 0 ? 'No Questions Found.' : (qCount - 1) + ' questions'
+          : !(qCount - 1) ? 'No Questions Found.' : (qCount - 1) + ' questions'
           }`}
       </p>
-      <button id="newbutt" className="questionsort" onClick={setNewest}>Newest</button>
-      <button id="activebutt" className="questionsort" onClick={setActive}>Active</button>
-      <button id="unbutt" className="questionsort" onClick={setUnanswered}>Unanswered</button>
+      <button id="newbutt" className="questionsort" onClick={() => setSortOrder('Newest')}>Newest</button>
+      <button id="activebutt" className="questionsort" onClick={() => setSortOrder('Active')}>Active</button>
+      <button id="unbutt" className="questionsort" onClick={() => setSortOrder('Unanswered')}>Unanswered</button>
       <br id="liststart"/>
       <table className="questions">
         <tbody>
