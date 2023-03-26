@@ -43,6 +43,20 @@ export default function QuestionForm ({ setActivePage }) {
     if (!text.length) {
       setTextError('A description is required!'); errFound = true
     } else setTextError('')
+    const matches = text.match(/\[(.+?)\]\((.*)\)/g)
+    if (matches) {
+      matches.forEach(match => {
+        const linkMatches = match.match(/\[(.+?)\]\((.*)\)/)
+        if (linkMatches) {
+          const [, , linkUrl] = linkMatches
+          if (!linkUrl.startsWith('http://') && !linkUrl.startsWith('https://')) {
+            setTextError(`Invalid hyperlink: '${linkUrl}'. Hyperlink must begin with 'http://' or 'https://'`); errFound = true
+          }
+        }
+      })
+    }
+
+    setText(text)
 
     /* Validate Tags */ /* regex auuuuuggghhhhhhh */
     if (!/^((?<=[\w+?#.])-?(?=[\w+?#.])|[\w+?#.]){1,10}(\s((?<=[\w+?#.])-?(?=[\w+?#.])|[\w+?#.]){1,10}){0,4}$/.test(tags)) {

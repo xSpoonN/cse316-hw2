@@ -38,7 +38,7 @@ export function Sidebar ({ pageChange, activePage }) {
   const handlePageChange = (page) => pageChange(page)
   return (
     <div id="sidebar">
-      <a className={activePage === 'Questions' ? 'sidebutt active' : 'sidebutt'} id="questiontab" onClick={() => handlePageChange('Questions')}>Questions</a> {/* Href to get to different pages */}
+      <a className={activePage === 'Questions' ? 'sidebutt active' : 'sidebutt'} id="questiontab" onClick={() => handlePageChange('Questions')}>Questions</a>
       <a className={activePage === 'AllTags' ? 'sidebutt active' : 'sidebutt'} id="tagtab" onClick={() => handlePageChange('AllTags')}>Tags</a>
     </div>
   )
@@ -52,8 +52,7 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
   const switchToPage = (page) => () => setActivePage(page)
 
   switch (activePage) {
-    case 'Questions':
-      console.log('Switching to Questions')
+    case 'Questions': /* console.log('Switching to Questions') */
       return (
         <>
           <p className="contentheader">All Questions</p>
@@ -61,23 +60,19 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
           <Questions key={ searchQuery } searchQuery={ searchQuery }/>
         </>
       )
-    case 'PostQuestion':
-      console.log('Switching to PostQuestion')
+    case 'PostQuestion': /* console.log('Switching to PostQuestion') */
       return (
         <PostQuestion setActivePage={setActivePage}/>
       )
-    case 'Answers':
-      console.log('Switching to Answers')
+    case 'Answers': /* console.log('Switching to Answers') */
       return (
         <Answers />
       )
-    case 'PostAnswer':
-      console.log('Switching to PostAnswer')
+    case 'PostAnswer': /* console.log('Switching to PostAnswer') */
       return (
         <AnswerForm setActivePage={setActivePage}/>
       )
-    case 'AllTags':
-      console.log('Switching to AllTags')
+    case 'AllTags': /* console.log('Switching to AllTags') */
       return (
         <AllTags />
       )
@@ -93,14 +88,10 @@ export default function fakeStackOverflow () {
   const [searchQuery, setSearchQuery] = useState('')
   const [activePage, setActivePage] = useState('Questions')
 
-  const handlePageChange = (page) => {
-    setActivePage(page)
-  }
-
   return (
     <div>
       <Header searchQueryChange={ setSearchQuery } className="header"/>
-      <Sidebar pageChange={handlePageChange} activePage={activePage}/>
+      <Sidebar pageChange={(page) => setActivePage(page)} activePage={activePage}/>
       <div className="content">
         <Page searchQuery={searchQuery} activePage={activePage} setActivePage={setActivePage}/>
       </div>
