@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { modle/* , showPage */ } from '../App.js'
+import { modle } from '../App.js'
 
-export default function QuestionForm ({ update }) {
+export default function QuestionForm ({ setActivePage }) {
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [tags, setTags] = useState('')
@@ -25,39 +25,33 @@ export default function QuestionForm ({ update }) {
       const tagsList = tags.split(' ')
       const tagIds = tagsList.map((tag) => modle.tagExists(tag) || modle.addTag(tag))
       modle.addQuestion(title, text, tagIds, user)
-      update()
+      setActivePage('Questions')
     }
   }
 
   function checkQuestionForm () {
-    console.log('Checking form...')
     let errFound = false
 
     /* Validate Title */
     if (title.length > 100) {
-      setTitleError('Title must be 100 characters or less!')
-      errFound = true
+      setTitleError('Title must be 100 characters or less!'); errFound = true
     } else if (!title.length) {
-      setTitleError('A title is required!')
-      errFound = true
+      setTitleError('A title is required!'); errFound = true
     } else setTitleError('')
 
     /* Validate Description */
     if (!text.length) {
-      setTextError('A description is required!')
-      errFound = true
+      setTextError('A description is required!'); errFound = true
     } else setTextError('')
 
     /* Validate Tags */ /* regex auuuuuggghhhhhhh */
     if (!/^((?<=[\w+?#.])-?(?=[\w+?#.])|[\w+?#.]){1,10}(\s((?<=[\w+?#.])-?(?=[\w+?#.])|[\w+?#.]){1,10}){0,4}$/.test(tags)) {
-      setTagsError('Between 1-5 tags of length 1-10 are required!')
-      errFound = true
+      setTagsError('Between 1-5 tags of length 1-10 are required!'); errFound = true
     } else setTagsError('')
 
     /* Validate Username */
     if (!user.length) {
-      setUserError('A username is required!')
-      errFound = true
+      setUserError('A username is required!'); errFound = true
     } else setUserError('')
 
     return !errFound
@@ -93,5 +87,5 @@ export default function QuestionForm ({ update }) {
   )
 }
 QuestionForm.propTypes = {
-  update: PropTypes.func.isRequired
+  setActivePage: PropTypes.func.isRequired
 }

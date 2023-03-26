@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { modle/* , showPage */ } from '../App.js'
+import { modle } from '../App.js'
 import '../stylesheets/questions.css'
 import '../stylesheets/fakeStackOverflow.css'
 /* import { showAnswers } from './answers.js' */
@@ -74,10 +74,9 @@ export default function Questions ({ searchQuery }) {
       /* Sort Options */
       if (searchQuery) qList = search(searchQuery)
       if (sortOrder === 'Newest' || sortOrder === 'Unanswered') {
-        /* console.log('Sorting by Newest') */ qList = qList.sort((a, b) => (b.askDate > a.askDate) ? -1 : 1)
-        qList.reverse()
+        qList = qList.sort((a, b) => (b.askDate > a.askDate) ? -1 : 1); qList.reverse()
       } else if (sortOrder === 'Active') {
-        /* console.log('Sorting by Active') */ qList.sort(compareActive)
+        qList.sort(compareActive)
       }
 
       const qL = qList.map((question) => {
@@ -152,7 +151,6 @@ export default function Questions ({ searchQuery }) {
           {questionList}
         </tbody>
       </table>
-      {/* <p id="nosearchresults">No Questions Found.</p> */}
     </div>
   )
 }

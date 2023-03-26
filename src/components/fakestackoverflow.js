@@ -41,7 +41,7 @@ Sidebar.propTypes = {
   pageChange: PropTypes.func.isRequired
 }
 
-export function Page ({ searchQuery, activePage, setActivePage, update }) {
+export function Page ({ searchQuery, activePage, setActivePage }) {
   const switchToPage = (page) => () => setActivePage(page)
 
   switch (activePage) {
@@ -57,7 +57,7 @@ export function Page ({ searchQuery, activePage, setActivePage, update }) {
     case 'PostQuestion':
       console.log('Switching to PostQuestion')
       return (
-        <PostQuestion update={update}/>
+        <PostQuestion setActivePage={setActivePage}/>
       )
     case 'Answers':
       console.log('Switching to Answers')
@@ -73,8 +73,7 @@ export function Page ({ searchQuery, activePage, setActivePage, update }) {
 Page.propTypes = {
   searchQuery: PropTypes.string,
   activePage: PropTypes.string.isRequired,
-  setActivePage: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  setActivePage: PropTypes.func.isRequired
 }
 
 export default function fakeStackOverflow () {
@@ -90,7 +89,7 @@ export default function fakeStackOverflow () {
       <Header searchQueryChange={ setSearchQuery } className="header"/>
       <Sidebar pageChange={handlePageChange}/>
       <div className="content">
-        <Page searchQuery={searchQuery} activePage={activePage} setActivePage={setActivePage} update={setSearchQuery}/>
+        <Page searchQuery={searchQuery} activePage={activePage} setActivePage={setActivePage}/>
       </div>
     </div>
   )
