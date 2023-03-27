@@ -39,10 +39,11 @@ export default function AnswerForm ({ setActivePage }) {
   }
 
   return (
+    <>
     <form onSubmit={handleSubmit}>
-      <div id="newanswer">
+      <div>
         <h2>Username*</h2>
-        <input type="text" name="answeruser" id="auser" value={user} onChange={handleUserChange} />
+        <input type="text" name="answeruser" id="auser" value={user} maxLength="100" onChange={handleUserChange} />
         <p className="errormsg" id="ausererror">{userError}</p>
 
         <h2>Answer Text*</h2>
@@ -55,6 +56,7 @@ export default function AnswerForm ({ setActivePage }) {
         <p style={{ textAlign: 'right' }}>* indicates mandatory fields</p>
       </div>
     </form>
+    </>
   )
 }
 AnswerForm.propTypes = {
