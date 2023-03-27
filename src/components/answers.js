@@ -2,16 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { modle } from '../App.js'
 
-export default function Answers ({ qid }) {
-  console.log('Answers: qid = ' + qid)
+export default function Answers ({ qid, gotoPostAnswerPage }) {
   const answers = modle.getAnswersByQID(qid).map((item) => {
     return <Answer key={item.aid} answer={item} />
   })
 
   return (
     <>
-    <button className="askqbutt">Ask Question</button>
-    <br />
     <p id="ap_answercount"><b>{modle.getQuestionCount(qid)} answers</b></p>
     <p id="ap_questiontitle"><b>{modle.getQuestionTitle(qid)}</b></p>
     <br />
@@ -24,12 +21,13 @@ export default function Answers ({ qid }) {
     </tbody></table>
     <br />
     {answers.length === 0 && <p id="ap_noanswers"><i>No Answers Yet...</i></p>}
-    <button id="ap_answerbutton">Answer Question</button>
+    <button id="ap_answerbutton" onClick={gotoPostAnswerPage}>Answer Question</button>
     </>
   )
 }
 Answers.propTypes = {
-  qid: PropTypes.string.isRequired
+  qid: PropTypes.string.isRequired,
+  gotoPostAnswerPage: PropTypes.func.isRequired
 }
 
 export function Answer ({ answer }) {
