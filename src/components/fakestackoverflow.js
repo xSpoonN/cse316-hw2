@@ -48,11 +48,15 @@ Sidebar.propTypes = {
   activePage: PropTypes.string.isRequired
 }
 
-export function Page ({ searchQuery, activePage, setActivePage }) {
+export function Page ({ searchQuery, activePage, setActivePage, setSearchQuery }) {
   const switchToPage = (page) => () => setActivePage(page)
   const showAnswer = () => (id) => {
     setQid(id)
     setActivePage('Answers')
+  }
+  const setSearch = (query) => () => {
+    setSearchQuery(query)
+    setActivePage('Questions')
   }
 
   const [currentQid, setQid] = useState('q1')
@@ -86,7 +90,7 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
       return (
         <>
         <button className="askqbutt">Ask Question</button>
-        <AllTags />
+        <AllTags setSearchQuery={setSearch} />
         </>
       )
   }
@@ -94,7 +98,8 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
 Page.propTypes = {
   searchQuery: PropTypes.string,
   activePage: PropTypes.string.isRequired,
-  setActivePage: PropTypes.func.isRequired
+  setActivePage: PropTypes.func.isRequired,
+  setSearchQuery: PropTypes.func.isRequired
 }
 
 export default function fakeStackOverflow () {
@@ -106,7 +111,7 @@ export default function fakeStackOverflow () {
       <Header searchQueryChange={ setSearchQuery } className="header"/>
       <Sidebar pageChange={(page) => setActivePage(page)} activePage={activePage}/>
       <div className="content">
-        <Page searchQuery={searchQuery} activePage={activePage} setActivePage={setActivePage}/>
+        <Page searchQuery={searchQuery} activePage={activePage} setActivePage={setActivePage} setSearchQuery={setSearchQuery}/>
       </div>
     </div>
   )
