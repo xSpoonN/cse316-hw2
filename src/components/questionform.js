@@ -2,6 +2,31 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { modle } from '../App.js'
 
+export function validateLinks (text) {
+  const matches = text.match(/\[(.*?)\]\((.*?)\)/g)
+  if (matches) {
+    for (const match of matches) {
+      const [full, , link] = match.match(/\[(.*?)\]\((.*?)\)/)
+      if (!link.match(/^https?:\/\//)) return full
+    }
+  }
+
+  return null
+  /* const matches = text.match(/\[(.+?)\]\((.*)\)/g)
+  if (matches) {
+    matches.forEach(match => {
+      const linkMatches = match.match(/\[(.+?)\]\((.*)\)/)
+      if (linkMatches) {
+        const [full, , linkUrl] = linkMatches
+        if (!linkUrl.startsWith('http://') && !linkUrl.startsWith('https://')) {
+          return full
+        }
+      }
+    })
+  }
+  return null */
+}
+
 export default function QuestionForm ({ setActivePage }) {
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
@@ -43,17 +68,12 @@ export default function QuestionForm ({ setActivePage }) {
     if (!text.length) {
       setTextError('A description is required!'); errFound = true
     } else setTextError('')
-    const matches = text.match(/\[(.+?)\]\((.*)\)/g)
-    if (matches) {
-      matches.forEach(match => {
-        const linkMatches = match.match(/\[(.+?)\]\((.*)\)/)
-        if (linkMatches) {
-          const [, , linkUrl] = linkMatches
-          if (!linkUrl.startsWith('http://') && !linkUrl.startsWith('https://')) {
-            setTextError(`Invalid hyperlink: '${linkUrl}'. Hyperlink must begin with 'http://' or 'https://'`); errFound = true
-          }
-        }
-      })
+
+    const invalidLink = validateLinks(text)
+    console.log(invalidLink)
+    if (invalidLink) {
+      setTextError(`Invalid hyperlink: '${invalidLink}'. Hyperlink must begin with 'http://' or 'https://'`)
+      errFound = true
     }
 
     setText(text)
