@@ -40,10 +40,6 @@
     vertical-align: bottom;
 }
 
-#newanswer {
-    display:none;
-}
-
 .aRow {
     border-bottom: 1px dotted black;
 }

@@ -8,7 +8,6 @@ import '../stylesheets/fakeStackOverflow.css'
 
 export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans, setActivePage }) {
   const setPage = (qid) => () => {
-    console.log(qid)
     setActivePage(qid)
   }
 
