@@ -80,7 +80,7 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
       )
     case 'PostAnswer': /* console.log('Switching to PostAnswer') */
       return (
-        <AnswerForm setActivePage={setActivePage}/>
+        <AnswerForm setActivePage={setActivePage} qid={currentQid}/>
       )
     case 'AllTags': /* console.log('Switching to AllTags') */
       return (

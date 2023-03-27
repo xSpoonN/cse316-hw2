@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import '../stylesheets/answerform.css' /* I'm not sure if this line even matters but why not ig */
-/* import { modle } from '../App.js' */
+import { modle } from '../App.js'
 
-export default function AnswerForm ({ setActivePage }) {
+export default function AnswerForm ({ setActivePage, qid }) {
   const [user, setUser] = useState('')
   const [text, setText] = useState('')
 
@@ -17,8 +17,8 @@ export default function AnswerForm ({ setActivePage }) {
     event.preventDefault()
 
     if (checkQuestionForm()) {
-      /* modle.addQuestion(stuff) */
-      setActivePage('Answers') /* Probably have to modify this a bit to make it return to the last question */
+      modle.addAnswer(qid, user, text, new Date())
+      setActivePage('Answers')
     }
   }
 
@@ -60,5 +60,6 @@ export default function AnswerForm ({ setActivePage }) {
   )
 }
 AnswerForm.propTypes = {
-  setActivePage: PropTypes.func.isRequired
+  setActivePage: PropTypes.func.isRequired,
+  qid: PropTypes.string.isRequired
 }
