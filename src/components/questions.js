@@ -6,7 +6,9 @@ import '../stylesheets/fakeStackOverflow.css'
 /* import { showAnswers } from './answers.js' */
 /* import { addTagLink } from './alltags.js' */
 
-export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans }) {
+export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans, setActivePage }) {
+  const setPage = (qid) => () => setActivePage(qid)
+
   if (unans && answers) return undefined
   return (
     <tr className="qRow">
@@ -16,7 +18,7 @@ export function Question ({ qid, answers, views, title, tagList, askedBy, date, 
       </td>
 
       <td className="qTD">
-        <a className="qlink" /* onClick={showAnswers(qid, true)} */>
+        <a className="qlink" onClick={ setPage(qid) }>
           {title}
         </a>
         <br/>
@@ -39,10 +41,11 @@ Question.propTypes = {
   tagList: PropTypes.array.isRequired,
   askedBy: PropTypes.string.isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
-  unans: PropTypes.bool.isRequired
+  unans: PropTypes.bool.isRequired,
+  setActivePage: PropTypes.func.isRequired
 }
 
-export default function Questions ({ searchQuery }) {
+export default function Questions ({ searchQuery, fun }) {
   const [sortOrder, setSortOrder] = useState('Newest')
   const [questionList, setQuestionList] = useState([])
   const [qCount, setQCount] = useState(0)
@@ -92,6 +95,7 @@ export default function Questions ({ searchQuery }) {
             date={askDate}
             key={qid}
             unans={sortOrder === 'Unanswered'}
+            setActivePage={fun}
           />
         )
       })
@@ -143,5 +147,6 @@ export default function Questions ({ searchQuery }) {
   )
 }
 Questions.propTypes = {
-  searchQuery: PropTypes.string
+  searchQuery: PropTypes.string,
+  fun: PropTypes.func.isRequired
 }
