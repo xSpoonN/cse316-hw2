@@ -7,7 +7,10 @@ import '../stylesheets/fakeStackOverflow.css'
 /* import { addTagLink } from './alltags.js' */
 
 export function Question ({ qid, answers, views, title, tagList, askedBy, date, unans, setActivePage }) {
-  const setPage = (qid) => () => setActivePage(qid)
+  const setPage = (qid) => () => {
+    console.log(qid)
+    setActivePage(qid)
+  }
 
   if (unans && answers) return undefined
   return (

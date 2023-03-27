@@ -50,12 +50,13 @@ Sidebar.propTypes = {
 
 export function Page ({ searchQuery, activePage, setActivePage }) {
   const switchToPage = (page) => () => setActivePage(page)
-  const showAnswer = (id) => () => {
+  const showAnswer = () => (id) => {
+    console.log(id)
     setQid(id)
     setActivePage('Answers')
   }
 
-  const [currentQid, setQid] = useState(0)
+  const [currentQid, setQid] = useState('q1')
 
   switch (activePage) {
     case 'Questions': /* console.log('Switching to Questions') */
@@ -72,7 +73,7 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
       )
     case 'Answers': /* console.log('Switching to Answers') */
       return (
-        <Answers />
+        <Answers qid={currentQid}/>
       )
     case 'PostAnswer': /* console.log('Switching to PostAnswer') */
       return (
