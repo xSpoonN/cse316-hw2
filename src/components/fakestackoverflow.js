@@ -84,7 +84,10 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
       )
     case 'AllTags': /* console.log('Switching to AllTags') */
       return (
+        <>
+        <button className="askqbutt">Ask Question</button>
         <AllTags />
+        </>
       )
   }
 }
