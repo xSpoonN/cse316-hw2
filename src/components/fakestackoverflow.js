@@ -50,6 +50,12 @@ Sidebar.propTypes = {
 
 export function Page ({ searchQuery, activePage, setActivePage }) {
   const switchToPage = (page) => () => setActivePage(page)
+  const showAnswer = (id) => () => {
+    setQid(id)
+    setActivePage('Answers')
+  }
+
+  const [currentQid, setQid] = useState(0)
 
   switch (activePage) {
     case 'Questions': /* console.log('Switching to Questions') */
@@ -57,7 +63,7 @@ export function Page ({ searchQuery, activePage, setActivePage }) {
         <>
           <p className="contentheader">All Questions</p>
           <button className="askqbutt" onClick={switchToPage('PostQuestion')}>Ask Question</button>
-          <Questions key={ searchQuery } searchQuery={ searchQuery }/>
+          <Questions key={ searchQuery } searchQuery={ searchQuery } fun={ showAnswer(currentQid) }/>
         </>
       )
     case 'PostQuestion': /* console.log('Switching to PostQuestion') */
