@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import '../stylesheets/answerform.css' /* I'm not sure if this line even matters but why not ig */
 import { modle } from '../App.js'
+import { validateLinks } from './questionform'
 
 export default function AnswerForm ({ setActivePage, qid }) {
   const [user, setUser] = useState('')
@@ -35,6 +36,13 @@ export default function AnswerForm ({ setActivePage, qid }) {
     if (!text.length) {
       setTextError('A description is required!'); errFound = true
     } else setTextError('')
+
+    /* Validate Any Hyperlinks */
+    const invalidLink = validateLinks(text)
+    if (invalidLink) {
+      setTextError(`Invalid hyperlink: '${invalidLink}'. Hyperlink must begin with 'http://' or 'https://'`)
+      errFound = true
+    }
 
     return !errFound
   }

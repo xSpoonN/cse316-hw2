@@ -9,13 +9,15 @@ export default function Answers ({ qid, gotoPostAnswerPage }) {
 
   modle.addViews(qid)
 
+  const textWithLinks = replaceLinks(modle.getQuestionText(qid))
+
   return (
     <>
     <p id="ap_answercount"><b>{modle.getQuestionCount(qid)} answers</b></p>
     <p id="ap_questiontitle"><b>{modle.getQuestionTitle(qid)}</b></p>
     <br />
     <p id="ap_views"><b>{modle.getViews(qid)} views</b></p>
-    <p id="ap_questiontext">{modle.getQuestionText(qid)}</p>
+    <p id="ap_questiontext" dangerouslySetInnerHTML={{ __html: textWithLinks }} />
     <p id="ap_askedby"><b>{modle.getWhoAsked(qid)}</b> asked<br />{modle.formatDate(modle.getAskDate(qid))}</p>
     <br />
     <table id="ap_answers"><tbody>
@@ -37,11 +39,11 @@ Answers.propTypes = {
 }
 
 export function Answer ({ answer }) {
-  const textWithLinks = answer.text
+  const textWithLinks = replaceLinks(answer.text)
   return (
     <>
     <tr className="aRow">
-      <td className="aTD aAns">{textWithLinks}</td>
+      <td className="aTD aAns" dangerouslySetInnerHTML={{ __html: textWithLinks }} />
       <td className="aTd aCred"><b>{answer.ansBy}</b> answered<br/>{modle.formatDate(answer.ansDate)}</td>
     </tr>
     </>
@@ -49,4 +51,14 @@ export function Answer ({ answer }) {
 }
 Answer.propTypes = {
   answer: PropTypes.object.isRequired
+}
+
+function replaceLinks (text) {
+  return text.replace(/\[(.*?)\]\((.*?)\)/g, (full, name, link) => {
+    if (link.match(/^https?:\/\//)) {
+      return `<a href='${link}'>${name}</a>`
+    } else {
+      return full
+    }
+  })
 }

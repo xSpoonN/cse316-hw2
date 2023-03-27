@@ -77,7 +77,7 @@ export function Page ({ searchQuery, activePage, setActivePage, setSearchQuery }
     case 'Answers': /* console.log('Switching to Answers') */
       return (
         <>
-        <button className="askqbutt">Ask Question</button>
+        <button className="askqbutt" onClick={switchToPage('PostQuestion')}>Ask Question</button>
         <br />
         <Answers qid={currentQid} gotoPostAnswerPage={switchToPage('PostAnswer')}/>
         </>
@@ -89,7 +89,7 @@ export function Page ({ searchQuery, activePage, setActivePage, setSearchQuery }
     case 'AllTags': /* console.log('Switching to AllTags') */
       return (
         <>
-        <button className="askqbutt">Ask Question</button>
+        <button className="askqbutt" onClick={switchToPage('PostQuestion')}>Ask Question</button>
         <AllTags setSearchQuery={setSearch} />
         </>
       )
