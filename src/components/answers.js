@@ -2,9 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { modle } from '../App.js'
 
-export default function Answers () {
-  const qid = 'q1' // Todo: get question id (HOWWWWWWWWWW)
-
+export default function Answers ({ qid }) {
+  console.log('Answers: qid = ' + qid)
   const answers = modle.getAnswersByQID(qid).map((item) => {
     return <Answer key={item.aid} answer={item} />
   })
@@ -28,6 +27,9 @@ export default function Answers () {
     <button id="ap_answerbutton">Answer Question</button>
     </>
   )
+}
+Answers.propTypes = {
+  qid: PropTypes.string.isRequired
 }
 
 export function Answer ({ answer }) {
