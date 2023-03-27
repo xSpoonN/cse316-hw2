@@ -241,6 +241,10 @@ export default class Model {
     return this.data.questions.filter((q) => q.tagIds.includes(tagId)).length
   }
 
+  getQuestionCountByTagId (tagId) {
+    return this.data.questions.filter((q) => q.tagIds.includes(tagId)).length
+  }
+
   getQuestionsByTagString (tagname) {
     const tagId = this.data.tags.find((t) => t.name === tagname).tid
     return this.data.questions.filter((q) => q.tagIds.includes(tagId))

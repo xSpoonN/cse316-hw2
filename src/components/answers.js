@@ -7,6 +7,8 @@ export default function Answers ({ qid, gotoPostAnswerPage }) {
     return <Answer key={item.aid} answer={item} />
   })
 
+  modle.addViews(qid)
+
   return (
     <>
     <p id="ap_answercount"><b>{modle.getQuestionCount(qid)} answers</b></p>
@@ -17,6 +19,10 @@ export default function Answers ({ qid, gotoPostAnswerPage }) {
     <p id="ap_askedby"><b>{modle.getWhoAsked(qid)}</b> asked<br />{modle.formatDate(modle.getAskDate(qid))}</p>
     <br />
     <table id="ap_answers"><tbody>
+      <tr className="aRow">
+        <td className="aTD aAns"></td>
+        <td className="aTD aCred"></td>
+      </tr>
       {answers}
     </tbody></table>
     <br />
