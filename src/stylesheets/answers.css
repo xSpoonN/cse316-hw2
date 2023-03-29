@@ -55,8 +55,9 @@
 
 .aCred {
     width: 20%;
-    vertical-align: bottom;
+    vertical-align: middle;
     text-align: right;
+    padding-right:40px
 }
 
 #ap_answerbutton {
