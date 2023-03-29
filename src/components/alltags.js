@@ -25,7 +25,7 @@ AllTags.propTypes = {
 export function Tag ({ tag, index, setSearchQuery }) {
   const c = modle.getQuestionCountByTagId(tag.tid)
   return (
-    <div className="tagbox" style={{ gridColumn: index % 3, gridRow: Math.floor(index / 3) }}>
+    <div className="tagbox" style={{ gridColumn: `${index % 3 + 1} / span 1`, gridRow: 'auto' }}>
       <p className="taglink" onClick={setSearchQuery('[' + tag.name + ']')}>{tag.name}</p>
       <p className="tagqcount">{c} question{c === 1 ? '' : 's'}</p>
     </div>

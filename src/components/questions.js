@@ -52,8 +52,23 @@ export default function Questions ({ searchQuery, fun }) {
   const [questionList, setQuestionList] = useState([])
   const [qCount, setQCount] = useState(0)
 
-  function search (query, q = modle.getAllQstns(), t = modle.getAllTags()) { // Maybe move this to another file.
-    const searchTerms = query.toLowerCase().split(' ')
+  function search (query, q = modle.getAllQstns(), t = modle.getAllTags()) {
+    let searchTerms = query.toLowerCase().split(' ')
+    let changed = false
+    do {
+      /* console.log(searchTerms) */ /* This separates all closely positioned tags. */
+      changed = false
+      for (const term of searchTerms) {
+        const ind = term.indexOf('][')
+        if (ind !== -1) {
+          searchTerms.push(term.slice(0, ind + 1))
+          searchTerms.push(term.slice(ind + 1))
+          searchTerms = searchTerms.filter((x) => x !== term)
+          changed = true
+        }
+      }
+    } while (changed)
+
     const searchWords = searchTerms.filter((word) => !/^\[\S+\]$/.test(word)) /* Words are those that are not surrounded in brackets */
     const searchTags = searchTerms
       .filter((word) => /^\[\S+\]$/.test(word)) /* Tests for [x] for tags */

@@ -34,8 +34,11 @@ Header.propTypes = {
   searchQueryChange: PropTypes.func.isRequired
 }
 
-export function Sidebar ({ pageChange, activePage }) {
-  const handlePageChange = (page) => pageChange(page)
+export function Sidebar ({ pageChange, activePage, searchQuery, setSearchQuery }) {
+  const handlePageChange = (page) => {
+    if (page === 'Questions') setSearchQuery('')
+    pageChange(page)
+  }
   return (
     <div id="sidebar">
       <a className={activePage === 'Questions' ? 'sidebutt active' : 'sidebutt'} id="questiontab" onClick={() => handlePageChange('Questions')}>Questions</a>
@@ -45,7 +48,9 @@ export function Sidebar ({ pageChange, activePage }) {
 }
 Sidebar.propTypes = {
   pageChange: PropTypes.func.isRequired,
-  activePage: PropTypes.string.isRequired
+  activePage: PropTypes.string.isRequired,
+  searchQuery: PropTypes.string,
+  setSearchQuery: PropTypes.func.isRequired
 }
 
 export function Page ({ searchQuery, activePage, setActivePage, setSearchQuery }) {
@@ -109,7 +114,7 @@ export default function fakeStackOverflow () {
   return (
     <div>
       <Header searchQueryChange={ setSearchQuery } className="header"/>
-      <Sidebar pageChange={(page) => setActivePage(page)} activePage={activePage}/>
+      <Sidebar pageChange={(page) => setActivePage(page)} activePage={activePage} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
       <div className="content">
         <Page searchQuery={searchQuery} activePage={activePage} setActivePage={setActivePage} setSearchQuery={setSearchQuery}/>
       </div>
