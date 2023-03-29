@@ -48,7 +48,7 @@ export default function QuestionForm ({ setActivePage }) {
 
     if (checkQuestionForm()) {
       const tagsList = tags.split(' ')
-      const tagIds = tagsList.map((tag) => modle.tagExists(tag) || modle.addTag(tag))
+      const tagIds = [...new Set(tagsList.map((tag) => modle.tagExists(tag.toLowerCase()) || modle.addTag(tag.toLowerCase())))]
       modle.addQuestion(title, text, tagIds, user)
       setActivePage('Questions')
     }
@@ -70,7 +70,7 @@ export default function QuestionForm ({ setActivePage }) {
     } else setTextError('')
 
     const invalidLink = validateLinks(text)
-    console.log(invalidLink)
+    /* console.log(invalidLink) */
     if (invalidLink) {
       setTextError(`Invalid hyperlink: '${invalidLink}'. Hyperlink must begin with 'http://' or 'https://'`)
       errFound = true

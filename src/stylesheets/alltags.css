@@ -4,6 +4,7 @@
     gap: 10%;
     grid-auto-rows: minmax(200px, auto);
     margin-right:5%;
+    grid-auto-flow: dense
     /* width: 20%;
     height: 15%; */
 }

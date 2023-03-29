@@ -284,11 +284,11 @@ export default class Model {
     let newqid = ''
     if (this.data.questions.length === 0) newqid = 'q1'
     else {
-      console.log(this.data.questions.reduce((max, q) =>
+      /* console.log(this.data.questions.reduce((max, q) =>
         parseInt(max.qid.substring(1)) > parseInt(q.qid.substring(1))
           ? max
           : q
-      ).qid.substring(1))
+      ).qid.substring(1)) */
       newqid = 'q' + (parseInt(this.data.questions.reduce((max, q) =>
         parseInt(max.qid.substring(1)) > parseInt(q.qid.substring(1))
           ? max
