@@ -50,7 +50,7 @@ export default class Model {
           text: 'hey vsauce, michael here',
           tagIds: ['t8'],
           askedBy: 'awawawawawa',
-          askDate: new Date('December, 2023 19:53:19'),
+          askDate: new Date('December 12, 2022 19:53:19'),
           ansIds: [],
           views: 23623
         },
@@ -241,6 +241,10 @@ export default class Model {
     return this.data.questions.filter((q) => q.tagIds.includes(tagId)).length
   }
 
+  getQuestionCountByTagId (tagId) {
+    return this.data.questions.filter((q) => q.tagIds.includes(tagId)).length
+  }
+
   getQuestionsByTagString (tagname) {
     const tagId = this.data.tags.find((t) => t.name === tagname).tid
     return this.data.questions.filter((q) => q.tagIds.includes(tagId))
@@ -280,11 +284,11 @@ export default class Model {
     let newqid = ''
     if (this.data.questions.length === 0) newqid = 'q1'
     else {
-      console.log(this.data.questions.reduce((max, q) =>
+      /* console.log(this.data.questions.reduce((max, q) =>
         parseInt(max.qid.substring(1)) > parseInt(q.qid.substring(1))
           ? max
           : q
-      ).qid.substring(1))
+      ).qid.substring(1)) */
       newqid = 'q' + (parseInt(this.data.questions.reduce((max, q) =>
         parseInt(max.qid.substring(1)) > parseInt(q.qid.substring(1))
           ? max
