@@ -15,3 +15,10 @@ In the sections below, list and describe each contribution briefly.
 
 ## Team Member 2 Contribution
 ### James Leonardi - 113332225 - <james.leonardi@stonybrook.edu>
+> **Answer Page** - Implemented the answer page, including the replacement of hyperlinks within the text.
+>
+> **Post a New Answer** - Implemented Post a New Answer page.
+>
+> **All Tags Page** - Implemented All Tags Page, including 3-column/row rule.
+>
+> **Filter by Tag** - Implemented filtering by a tag, used in All Tags Page.
